@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:DASH:schema:MPD:2011" xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd" minBufferTime="PT1.500S" profiles="urn:mpeg:dash:profile:isoff-on-demand:2011" type="static" mediaPresentationDuration="PT734.335S">
+ <Period duration="PT734.335S">
+  <AdaptationSet id="0" mimeType="audio/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="149" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="130258">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>http://server.com/dash/audio-2ch-48000Hz-130258-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1553-2472" indexRangeExact="true">
+     <Initialization range="0-1552"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="150" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="258317">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>http://server.com/dash/audio-2ch-48000Hz-258317-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1553-2472" indexRangeExact="true">
+     <Initialization range="0-1552"/>
+    </SegmentBase>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet id="1" mimeType="audio/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="259" codecs="mp4a.40.5" audioSamplingRate="24000" startWithSAP="1" bandwidth="196409">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="6"/>
+    <BaseURL>http://server.com/dash/audio-6ch-24000Hz-196409-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1555-2474" indexRangeExact="true">
+     <Initialization range="0-1554"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="261" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="388744">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="6"/>
+    <BaseURL>http://server.com/dash/audio-6ch-48000Hz-388744-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1553-2472" indexRangeExact="true">
+     <Initialization range="0-1552"/>
+    </SegmentBase>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet id="2" mimeType="video/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="142" codecs="avc1.4d400d" width="426" height="178" startWithSAP="1" maxPlayoutRate="1" bandwidth="195750" frameRate="24">
+    <BaseURL>http://server.com/dash/video-426x178-195750-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="143" codecs="avc1.4d4015" width="640" height="266" startWithSAP="1" maxPlayoutRate="1" bandwidth="475133" frameRate="24">
+    <BaseURL>http://server.com/dash/video-640x266-475133-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="144" codecs="avc1.4d401e" width="854" height="356" startWithSAP="1" maxPlayoutRate="1" bandwidth="881710" frameRate="24">
+    <BaseURL>http://server.com/dash/video-854x356-881710-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="161" codecs="avc1.42c00c" width="256" height="106" startWithSAP="1" maxPlayoutRate="1" bandwidth="120046" frameRate="12">
+    <BaseURL>http://server.com/dash/video-256x106-120046-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1693-3380" indexRangeExact="true">
+     <Initialization range="0-1692"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="222" codecs="avc1.4d401e" width="854" height="356" startWithSAP="1" maxPlayoutRate="1" bandwidth="1316671" frameRate="24">
+    <BaseURL>http://server.com/dash/video-854x356-1316671-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="223" codecs="avc1.4d401e" width="854" height="356" startWithSAP="1" maxPlayoutRate="1" bandwidth="2612933" frameRate="24">
+    <BaseURL>http://server.com/dash/video-854x356-2612933-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="145" codecs="avc1.4d401f" width="1280" height="534" startWithSAP="1" maxPlayoutRate="1" bandwidth="1762217" frameRate="24">
+    <BaseURL>http://server.com/dash/video-1280x534-1762217-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="146" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" maxPlayoutRate="1" bandwidth="3271995" frameRate="24">
+    <BaseURL>http://server.com/dash/video-1920x800-3271995-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="224" codecs="avc1.4d401f" width="1280" height="534" startWithSAP="1" maxPlayoutRate="1" bandwidth="2626227" frameRate="24">
+    <BaseURL>http://server.com/dash/video-1280x534-2626227-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="225" codecs="avc1.4d401f" width="1280" height="534" startWithSAP="1" maxPlayoutRate="1" bandwidth="4346209" frameRate="24">
+    <BaseURL>http://server.com/dash/video-1280x534-4346209-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="226" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" maxPlayoutRate="1" bandwidth="4475111" frameRate="24">
+    <BaseURL>http://server.com/dash/video-1920x800-4475111-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="227" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" maxPlayoutRate="1" bandwidth="6178058" frameRate="24">
+    <BaseURL>http://server.com/dash/video-1920x800-6178058-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRange="1739-3426" indexRangeExact="true">
+     <Initialization range="0-1738"/>
+    </SegmentBase>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet id="3" mimeType="video/mp4" subsegmentAlignment="true">
+   <SupplementalProperty schemeIdUri="http://dashif.org/guidelines/trickmode" value="2"/>
+   <Representation id="401" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="1323473" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-3271995-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1720">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="402" codecs="avc1.64000b" width="426" height="178" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="73463" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-426x178-195750-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="403" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="1808703" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-4475111-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1720">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="404" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="26880" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-3271995-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="876-919">
+     <Initialization range="0-875"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="405" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="30342" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-4475111-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="876-919">
+     <Initialization range="0-875"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="406" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="56593" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-3271995-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="874-941">
+     <Initialization range="0-873"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="407" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="90056" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-854x356-1316671-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="408" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="45577" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-2626227-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="409" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="301284" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-4475111-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1036">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="410" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="14296" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-854x356-881710-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="411" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="12574" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-854x356-2612933-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="412" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="1757483" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-4346209-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="413" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="44040" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-854x356-2612933-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="414" codecs="avc1.64000b" width="426" height="178" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="3083" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-426x178-195750-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="415" codecs="avc1.640015" width="640" height="266" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="186658" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-640x266-475133-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="416" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="1062040" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-854x356-2612933-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="417" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="293207" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-4346209-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="418" codecs="avc1.64000b" width="426" height="178" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="12122" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-426x178-195750-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="419" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="8817" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-854x356-1316671-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="420" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="21059" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-4346209-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="421" codecs="avc1.640015" width="640" height="266" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="7478" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-640x266-475133-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="422" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="415116" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-6178058-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1036">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="423" codecs="avc1.64000b" width="256" height="106" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="150" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-256x106-120046-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-918">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="424" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="539375" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-854x356-1316671-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="425" codecs="avc1.640015" width="640" height="266" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="2965" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-640x266-475133-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="426" codecs="avc1.640015" width="640" height="266" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="30469" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-640x266-475133-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="427" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="179017" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-2626227-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="428" codecs="avc1.64000b" width="256" height="106" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="965" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-256x106-120046-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="874-941">
+     <Initialization range="0-873"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="429" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="104952" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-6178058-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="874-941">
+     <Initialization range="0-873"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="430" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="119983" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-1762217-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="431" codecs="avc1.64000b" width="256" height="106" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="6946" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-256x106-120046-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1036">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="432" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="29997" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-1762217-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="433" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="1070636" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-2626227-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="434" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="17199" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-2626227-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="435" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="34456" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-6178058-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="876-919">
+     <Initialization range="0-875"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="436" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="356438" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-854x356-881710-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="437" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="22377" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-854x356-1316671-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="438" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="73400" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-4346209-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="875-942">
+     <Initialization range="0-874"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="439" codecs="avc1.64000b" width="256" height="106" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="44567" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-256x106-120046-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1720">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="440" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="177350" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-854x356-2612933-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="441" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="96" bandwidth="76170" frameRate="1/4">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-4475111-0.25fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="874-941">
+     <Initialization range="0-873"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="442" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="14353" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-1762217-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="443" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="220519" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-3271995-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1036">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="444" codecs="avc1.640028" width="1920" height="800" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="2485296" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-1920x800-6178058-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="861-1720">
+     <Initialization range="0-860"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="445" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="7302" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-854x356-881710-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="877-920">
+     <Initialization range="0-876"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="446" codecs="avc1.64001f" width="1280" height="534" startWithSAP="1" codingDependency="false" maxPlayoutRate="4" bandwidth="717317" frameRate="6">
+    <BaseURL>http://server.com/dash/video-idr-1280x534-1762217-6fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1721">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="447" codecs="avc1.640016" width="854" height="356" startWithSAP="1" codingDependency="false" maxPlayoutRate="24" bandwidth="59625" frameRate="1">
+    <BaseURL>http://server.com/dash/video-idr-854x356-881710-1fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="862-1037">
+     <Initialization range="0-861"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="448" codecs="avc1.64000b" width="426" height="178" startWithSAP="1" codingDependency="false" maxPlayoutRate="384" bandwidth="335" frameRate="1/16">
+    <BaseURL>http://server.com/dash/video-idr-426x178-195750-0.0625fps-output_dashinit.mp4?id=fa3b2df87f50cce0</BaseURL>
+    <SegmentBase indexRangeExact="true" indexRange="876-919">
+     <Initialization range="0-875"/>
+    </SegmentBase>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="en">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="en" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/en</BaseURL>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="es">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="es" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/es</BaseURL>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="fr">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="fr" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/fr</BaseURL>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="it">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="it" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/it</BaseURL>
+   </Representation>
+  </AdaptationSet>
+ </Period>
+</MPD>

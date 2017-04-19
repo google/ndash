@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:DASH:schema:MPD:2011" xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd" minBufferTime="PT1.500S" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="dynamic" availabilityStartTime="2015-06-11T23:54:01" timeShiftBufferDepth="PT10.000S" minimumUpdatePeriod="PT3.000S">
+ <Period start="PT681671.024S">
+  <SegmentList presentationTimeOffset="93802500" startNumber="272672" timescale="1000">
+   <SegmentTimeline>
+    <S d="2500"/>
+    <S d="2500"/>
+    <S d="2500"/>
+    <S d="2500"/>
+   </SegmentTimeline>
+  </SegmentList>
+  <AdaptationSet mimeType="audio/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="141" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="272000">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>http://server.com/audio141</BaseURL>
+    <SegmentList>
+     <Initialization sourceURL="http://server.com/init/"/>
+     <SegmentURL media="sq/272672/clen/41771/lmt/1434748528531847/dur/2.500"/>
+     <SegmentURL media="sq/272673/clen/41446/lmt/1434748531069224/dur/2.500"/>
+     <SegmentURL media="sq/272674/clen/41209/lmt/1434748533279040/dur/2.500"/>
+     <SegmentURL media="sq/272675/clen/41254/lmt/1434748536132754/dur/2.500"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="video/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="135" codecs="avc1.64001e" width="654" height="480" startWithSAP="1" bandwidth="2113152" frameRate="30">
+    <BaseURL>http://server.com/video135</BaseURL>
+    <SegmentList>
+     <Initialization sourceURL="http://server.com/init/"/>
+     <SegmentURL media="sq/272672/clen/687746/lmt/1434748528531847/dur/2.500"/>
+     <SegmentURL media="sq/272673/clen/660364/lmt/1434748531069224/dur/2.500"/>
+     <SegmentURL media="sq/272674/clen/635180/lmt/1434748533279040/dur/2.500"/>
+     <SegmentURL media="sq/272675/clen/663215/lmt/1434748536132754/dur/2.500"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="application/x-rawcc">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="rawcc" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/rawcc</BaseURL>
+    <SegmentList>
+     <SegmentURL media="sq/272672"/>
+     <SegmentURL media="sq/272673"/>
+     <SegmentURL media="sq/272674"/>
+     <SegmentURL media="sq/272675"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="en">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="en" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/en</BaseURL>
+    <SegmentList>
+     <SegmentURL media="sq/272672"/>
+     <SegmentURL media="sq/272673"/>
+     <SegmentURL media="sq/272674"/>
+     <SegmentURL media="sq/272675"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="es">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="es" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/es</BaseURL>
+    <SegmentList>
+     <SegmentURL media="sq/272672"/>
+     <SegmentURL media="sq/272673"/>
+     <SegmentURL media="sq/272674"/>
+     <SegmentURL media="sq/272675"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="fr">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="fr" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/fr</BaseURL>
+    <SegmentList>
+     <SegmentURL media="sq/272672"/>
+     <SegmentURL media="sq/272673"/>
+     <SegmentURL media="sq/272674"/>
+     <SegmentURL media="sq/272675"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="text/vtt" lang="it">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+   <Representation id="it" codecs="" bandwidth="0">
+    <BaseURL>http://server.com/captions/vtt/it</BaseURL>
+    <SegmentList>
+     <SegmentURL media="sq/272672"/>
+     <SegmentURL media="sq/272673"/>
+     <SegmentURL media="sq/272674"/>
+     <SegmentURL media="sq/272675"/>
+    </SegmentList>
+   </Representation>
+  </AdaptationSet>
+ </Period>
+</MPD>

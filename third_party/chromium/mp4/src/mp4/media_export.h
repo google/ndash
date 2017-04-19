@@ -1,0 +1,4 @@
+#ifndef MP4_MEDIA_EXPORT_H_
+#define MP4_MEDIA_EXPORT_H_
+#define MEDIA_EXPORT
+#endif  // MP4_MEDIA_EXPORT_H_

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:DASH:schema:MPD:2011" xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd" minBufferTime="PT1.500S" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="static" availabilityStartTime="2015-06-19T06:19:35" timeShiftBufferDepth="PT10.000S" mediaPresentationDuration="PT3600.922S">
+  <Period start="PT12538624.516S">
+    <SegmentTemplate timescale="1000" startNumber="5017307" media="http://server.com/$RepresentationID$/$Number$" presentationTimeOffset="94232500">
+      <SegmentTimeline>
+        <S d="2500" r="1439"/>
+      </SegmentTimeline>
+    </SegmentTemplate>
+    <AdaptationSet id="0" mimeType="audio/mp4" subsegmentAlignment="true">
+      <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+      <Representation id="audio" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="272000">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet id="1" mimeType="video/mp4" subsegmentAlignment="true">
+      <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+      <Representation id="video" codecs="avc1.64001f" width="854" height="480" startWithSAP="1" maxPlayoutRate="1" bandwidth="2113152" frameRate="30"/>
+    </AdaptationSet>
+    <AdaptationSet mimeType="application/x-rawcc">
+      <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+      <Representation id="rawcc" codecs="" bandwidth="0"/>
+    </AdaptationSet>
+    <AdaptationSet mimeType="text/vtt" lang="en">
+      <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="caption"/>
+      <Representation id="webvtt" codecs="" bandwidth="0"/>
+    </AdaptationSet>
+    <AdaptationSet id="19" mimeType="video/mp4" subsegmentAlignment="true">
+      <SupplementalProperty schemeIdUri="http://dashif.org/guidelines/trickmode" value="1"/>
+      <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+      <Representation id="trick" codecs="avc1.64001f" width="854" height="480" startWithSAP="1" maxPlayoutRate="256" bandwidth="2113152" frameRate="30"/>
+    </AdaptationSet>
+  </Period>
+</MPD>

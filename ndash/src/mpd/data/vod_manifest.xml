@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:DASH:schema:MPD:2011" xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 DASH-MPD.xsd" minBufferTime="PT1.500S" profiles="urn:mpeg:dash:profile:isoff-on-demand:2011" type="static" mediaPresentationDuration="PT3695.024S">
+ <Period>
+  <AdaptationSet mimeType="audio/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="148" codecs="mp4a.40.5" audioSamplingRate="22050" startWithSAP="1" bandwidth="53300">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>https://server.com/audio148</BaseURL>
+    <SegmentBase indexRange="1555-5978" indexRangeExact="true">
+     <Initialization range="0-1554"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="149" codecs="mp4a.40.2" audioSamplingRate="44100" startWithSAP="1" bandwidth="133503">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>https://server.com/audio149</BaseURL>
+    <SegmentBase indexRange="1553-5976" indexRangeExact="true">
+     <Initialization range="0-1552"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="150" codecs="mp4a.40.2" audioSamplingRate="44100" startWithSAP="1" bandwidth="261262">
+    <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+    <BaseURL>https://server.com/audio150</BaseURL>
+    <SegmentBase indexRange="1553-5976" indexRangeExact="true">
+     <Initialization range="0-1552"/>
+    </SegmentBase>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet mimeType="video/mp4" subsegmentAlignment="true">
+   <Role schemeIdUri="urn:mpeg:DASH:role:2011" value="main"/>
+   <Representation id="142" codecs="avc1.4d4015" width="426" height="240" startWithSAP="1" bandwidth="276490" frameRate="30">
+    <BaseURL>https://server.com/video142</BaseURL>
+    <SegmentBase indexRange="1691-10026" indexRangeExact="true">
+     <Initialization range="0-1690"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="143" codecs="avc1.4d401e" width="640" height="360" startWithSAP="1" bandwidth="625098" frameRate="30">
+    <BaseURL>https://server.com/video143</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="144" codecs="avc1.4d401f" width="854" height="480" startWithSAP="1" bandwidth="1116595" frameRate="30">
+    <BaseURL>https://server.com/video144</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="161" codecs="avc1.42c00c" width="256" height="144" startWithSAP="1" bandwidth="121192" frameRate="15">
+    <BaseURL>https://server.com/video161</BaseURL>
+    <SegmentBase indexRange="1687-10022" indexRangeExact="true">
+     <Initialization range="0-1686"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="222" codecs="avc1.4d401f" width="854" height="480" startWithSAP="1" bandwidth="1687596" frameRate="30">
+    <BaseURL>https://server.com/video222</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="223" codecs="avc1.4d401f" width="854" height="480" startWithSAP="1" bandwidth="3354328" frameRate="30">
+    <BaseURL>https://server.com/video223</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="145" codecs="avc1.4d401f" width="1280" height="720" startWithSAP="1" bandwidth="2241468" frameRate="30">
+    <BaseURL>https://server.com/video145</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="146" codecs="avc1.640028" width="1920" height="1080" startWithSAP="1" bandwidth="4616662" frameRate="30">
+    <BaseURL>https://server.com/video146</BaseURL>
+    <SegmentBase indexRange="1731-10066" indexRangeExact="true">
+     <Initialization range="0-1730"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="224" codecs="avc1.4d401f" width="1280" height="720" startWithSAP="1" bandwidth="3358065" frameRate="30">
+    <BaseURL>https://server.com/video224</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="225" codecs="avc1.4d401f" width="1280" height="720" startWithSAP="1" bandwidth="5621852" frameRate="30">
+    <BaseURL>https://server.com/video225</BaseURL>
+    <SegmentBase indexRange="1727-10062" indexRangeExact="true">
+     <Initialization range="0-1726"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="226" codecs="avc1.640028" width="1920" height="1080" startWithSAP="1" bandwidth="5935493" frameRate="30">
+    <BaseURL>https://server.com/video226</BaseURL>
+    <SegmentBase indexRange="1731-10066" indexRangeExact="true">
+     <Initialization range="0-1730"/>
+    </SegmentBase>
+   </Representation>
+   <Representation id="227" codecs="avc1.640028" width="1920" height="1080" startWithSAP="1" bandwidth="8113873" frameRate="30">
+    <BaseURL>https://server.com/video227</BaseURL>
+    <SegmentBase indexRange="1731-10066" indexRangeExact="true">
+     <Initialization range="0-1730"/>
+    </SegmentBase>
+   </Representation>
+  </AdaptationSet>
+ </Period>
+</MPD>
