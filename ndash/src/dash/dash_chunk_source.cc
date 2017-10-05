@@ -226,7 +226,7 @@ void DashChunkSource::Enable(const TrackCriteria* track_criteria) {
     manifest_fetcher_->Enable();
     ProcessManifest(manifest_fetcher_->GetManifest());
   } else {
-    ProcessManifest(current_manifest_.get());
+    ProcessManifest(current_manifest_);
   }
 }
 
@@ -236,7 +236,7 @@ void DashChunkSource::ContinueBuffering(base::TimeDelta playback_position) {
   }
 
   if (manifest_fetcher_->HasManifest() &&
-      manifest_fetcher_->GetManifest() != current_manifest_) {
+      manifest_fetcher_->GetManifest().get() != current_manifest_.get()) {
     DLOG(INFO) << "New manifest";
     ProcessManifest(manifest_fetcher_->GetManifest());
   }
@@ -440,11 +440,16 @@ void DashChunkSource::GetChunkOperation(
   const mpd::RangedUri* pending_initialization_uri = nullptr;
   const mpd::RangedUri* pending_index_uri = nullptr;
 
-  const MediaFormat* media_format = representation_holder->media_format();
-  if (!media_format) {
+  std::unique_ptr<const MediaFormat> media_format;
+
+  const MediaFormat* mf = representation_holder->media_format();
+  if (!mf) {
     pending_initialization_uri =
         selected_representation->GetInitializationUri();
+  } else {
+    media_format.reset(new MediaFormat(*mf));
   }
+
   if (!representation_holder->segment_index()) {
     pending_index_uri = selected_representation->GetIndexUri();
   }
@@ -469,9 +474,13 @@ void DashChunkSource::GetChunkOperation(
                       ? queue->back()->GetNextChunkIndex()
                       : queue->back()->GetPrevChunkIndex();
 
-  std::unique_ptr<chunk::Chunk> next_media_chunk = NewMediaChunk(
-      *period_holder, representation_holder, data_source_, media_format,
-      segment_num, evaluation_.trigger_, format_given_cb_);
+  std::unique_ptr<mpd::RangedUri> segment_uri =
+      representation_holder->GetSegmentUri(segment_num);
+
+  std::unique_ptr<chunk::Chunk> next_media_chunk =
+      NewMediaChunk(*period_holder, representation_holder, data_source_,
+                    std::move(media_format), segment_num, evaluation_.trigger_,
+                    format_given_cb_);
   last_chunk_was_initialization_ = false;
   out->SetChunk(std::move(next_media_chunk));
 }
@@ -567,7 +576,7 @@ class PtrFormatBandwidthComparator {
 // For TESTING
 DashChunkSource::DashChunkSource(
     drm::DrmSessionManagerInterface* drm_session_manager,
-    const mpd::MediaPresentationDescription* manifest,
+    scoped_refptr<const mpd::MediaPresentationDescription> manifest,
     upstream::DataSourceInterface* data_source,
     chunk::FormatEvaluatorInterface* adaptive_format_evaluator,
     const mpd::AdaptationType& adaptation_type,
@@ -592,7 +601,7 @@ DashChunkSource::DashChunkSource(
 DashChunkSource::DashChunkSource(
     drm::DrmSessionManagerInterface* drm_session_manager,
     ManifestFetcher* manifest_fetcher,
-    const mpd::MediaPresentationDescription* initial_manifest,
+    scoped_refptr<const mpd::MediaPresentationDescription> initial_manifest,
     upstream::DataSourceInterface* data_source,
     chunk::FormatEvaluatorInterface* adaptive_format_evaluator,
     const mpd::AdaptationType& adaptation_type,
@@ -694,7 +703,7 @@ std::unique_ptr<chunk::Chunk> DashChunkSource::NewInitializationChunk(
     const mpd::RangedUri* initialization_uri,
     const mpd::RangedUri* index_uri,
     const mpd::Representation& representation,
-    chunk::ChunkExtractorWrapper* extractor,
+    scoped_refptr<chunk::ChunkExtractorWrapper> extractor,
     upstream::DataSourceInterface* data_source,
     int32_t manifest_index,
     chunk::Chunk::TriggerReason trigger,
@@ -730,7 +739,7 @@ std::unique_ptr<chunk::Chunk> DashChunkSource::NewMediaChunk(
     const PeriodHolder& period_holder,
     RepresentationHolder* representation_holder,
     upstream::DataSourceInterface* data_source,
-    const MediaFormat* media_format,
+    std::unique_ptr<const MediaFormat> media_format,
     int32_t segment_num,
     chunk::Chunk::TriggerReason trigger,
     chunk::Chunk::FormatGivenCB format_given_cb) {
@@ -759,16 +768,16 @@ std::unique_ptr<chunk::Chunk> DashChunkSource::NewMediaChunk(
     new_chunk.reset(new chunk::SingleSampleMediaChunk(
         data_source, &data_spec, chunk::Chunk::kTriggerInitial, format,
         start_time.InMicroseconds(), end_time.InMicroseconds(), segment_num,
-        media_format, nullptr, period_holder.local_index()));
+        std::move(media_format), nullptr, period_holder.local_index()));
     if (!format_given_cb.is_null()) {
-      format_given_cb.Run(media_format);
+      format_given_cb.Run(media_format.get());
     }
   } else {
     bool is_media_format_final = (media_format != nullptr);
     new_chunk.reset(new chunk::ContainerMediaChunk(
         data_source, &data_spec, trigger, format, start_time.InMicroseconds(),
         end_time.InMicroseconds(), segment_num, sample_offset,
-        representation_holder->extractor_wrapper(), media_format,
+        representation_holder->extractor_wrapper(), std::move(media_format),
         period_holder.drm_init_data(), is_media_format_final,
         period_holder.local_index()));
     new_chunk->SetFormatGivenCallback(format_given_cb);
@@ -833,8 +842,9 @@ const PeriodHolder* DashChunkSource::FindPeriodHolder(
 }
 
 void DashChunkSource::ProcessManifest(
-    const mpd::MediaPresentationDescription* manifest) {
+    scoped_refptr<const mpd::MediaPresentationDescription> manifest) {
   // Remove old periods.
+
   const mpd::Period* first_period = manifest->GetPeriod(0);
   while (period_holders_.size() > 0 &&
          period_holders_.begin()->second->start_time().InMilliseconds() <
@@ -901,7 +911,7 @@ void DashChunkSource::ProcessManifest(
     NotifyAvailableRangeChanged(*available_range_);
   }
 
-  current_manifest_ = std::move(manifest);
+  current_manifest_ = manifest;
 }
 
 std::unique_ptr<TimeRangeInterface> DashChunkSource::GetAvailableRange() const {

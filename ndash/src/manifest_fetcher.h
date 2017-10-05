@@ -73,7 +73,7 @@ class ManifestFetcher {
 
   // Get a pointer to the most recent parsed manifest this manifest fetcher
   // is holding. May be null.
-  const mpd::MediaPresentationDescription* GetManifest() const;
+  const scoped_refptr<mpd::MediaPresentationDescription> GetManifest() const;
 
   // Returns true iff a manifest is held
   bool HasManifest() const { return manifest_ != nullptr; }

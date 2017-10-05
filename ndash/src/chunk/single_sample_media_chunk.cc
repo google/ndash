@@ -39,7 +39,7 @@ SingleSampleMediaChunk::SingleSampleMediaChunk(
     int64_t start_time_us,
     int64_t end_time_us,
     int32_t chunk_index,
-    const MediaFormat* sample_format,
+    std::unique_ptr<const MediaFormat> sample_format,
     scoped_refptr<const drm::RefCountedDrmInitData> sample_drm_init_data,
     int parent_id)
     : BaseMediaChunk(data_spec,
@@ -51,13 +51,13 @@ SingleSampleMediaChunk::SingleSampleMediaChunk(
                      true,
                      parent_id),
       data_source_(data_source),
-      sample_format_(sample_format),
+      sample_format_(std::move(sample_format)),
       sample_drm_init_data_(std::move(sample_drm_init_data)) {}
 
 SingleSampleMediaChunk::~SingleSampleMediaChunk() {}
 
 const MediaFormat* SingleSampleMediaChunk::GetMediaFormat() const {
-  return sample_format_;
+  return sample_format_.get();
 }
 
 scoped_refptr<const drm::RefCountedDrmInitData>

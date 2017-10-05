@@ -45,12 +45,12 @@ class SingleTrackOutputInterface;
 // The wrapper allows switching of the SingleTrackOutput that receives parsed
 // data.
 class ChunkExtractorWrapper : public extractor::ExtractorOutputInterface,
-                              public extractor::TrackOutputInterface {
+                              public extractor::TrackOutputInterface,
+                              public base::RefCounted<ChunkExtractorWrapper> {
  public:
   // extractor: The Extractor to wrap.
   explicit ChunkExtractorWrapper(
       std::unique_ptr<extractor::ExtractorInterface> extractor);
-  ~ChunkExtractorWrapper() override;
 
   // Initializes the extractor to output to the provided
   // SingleTrackOutputInterface, and configures it to receive data from a new
@@ -100,6 +100,9 @@ class ChunkExtractorWrapper : public extractor::ExtractorOutputInterface,
                            std::vector<int32_t>* num_bytes_enc) override;
 
  private:
+  ~ChunkExtractorWrapper() override;
+
+  friend class base::RefCounted<ChunkExtractorWrapper>;
   std::unique_ptr<extractor::ExtractorInterface> extractor_;
   bool extractor_initialized_ = false;
   SingleTrackOutputInterface* output_ = nullptr;

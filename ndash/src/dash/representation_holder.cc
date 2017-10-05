@@ -16,10 +16,6 @@
 
 #include "dash/representation_holder.h"
 
-#include <cstdint>
-#include <memory>
-
-#include "base/time/time.h"
 #include "chunk/chunk_extractor_wrapper.h"
 #include "media_format.h"
 #include "mpd/dash_segment_index.h"
@@ -32,10 +28,10 @@ RepresentationHolder::RepresentationHolder(
     base::TimeDelta period_start_time,
     base::TimeDelta period_duration,
     const mpd::Representation* representation,
-    std::unique_ptr<chunk::ChunkExtractorWrapper> extractor_wrapper)
+    scoped_refptr<chunk::ChunkExtractorWrapper> extractor_wrapper)
     : period_start_time_(period_start_time),
       period_duration_(period_duration),
-      extractor_wrapper_(std::move(extractor_wrapper)),
+      extractor_wrapper_(extractor_wrapper),
       representation_(representation),
       segment_index_(representation->GetIndex()) {}
 
@@ -43,8 +39,7 @@ RepresentationHolder::~RepresentationHolder() {}
 
 void RepresentationHolder::GiveMediaFormat(
     std::unique_ptr<const MediaFormat> media_format) {
-  owned_media_format_ = std::move(media_format);
-  media_format_ = owned_media_format_.get();
+  media_format_ = std::move(media_format);
 }
 void RepresentationHolder::GiveSegmentIndex(
     std::unique_ptr<const mpd::DashSegmentIndexInterface> segment_index) {
@@ -61,11 +56,15 @@ bool RepresentationHolder::UpdateRepresentation(
 
   period_duration_ = new_period_duration;
   representation_ = new_representation;
+
   if (!old_index) {
     // Segment numbers cannot shift if the index isn't defined by the
     // manifest.
     return true;
   }
+
+  segment_index_ = new_index;
+  owned_segment_index_.reset();
 
   if (!old_index->IsExplicit()) {
     // Segment numbers cannot shift if the index isn't explicit.
@@ -79,9 +78,11 @@ bool RepresentationHolder::UpdateRepresentation(
           old_index->GetTimeUs(old_index_last_segment_num)) +
       base::TimeDelta::FromMicroseconds(old_index->GetDurationUs(
           old_index_last_segment_num, period_duration_.InMicroseconds()));
+
   int32_t new_index_first_segment_num = new_index->GetFirstSegmentNum();
   base::TimeDelta new_index_start_time = base::TimeDelta::FromMicroseconds(
       new_index->GetTimeUs(new_index_first_segment_num));
+
   if (old_index_end_time == new_index_start_time) {
     // The new index continues where the old one ended, with no overlap.
     segment_num_shift_ +=
@@ -101,7 +102,6 @@ bool RepresentationHolder::UpdateRepresentation(
       old_index->GetSegmentNum(new_index_start_time.InMicroseconds(),
                                period_duration_.InMicroseconds()) -
       new_index_first_segment_num;
-
   return true;
 }
 

@@ -36,7 +36,7 @@ InitializationChunk::InitializationChunk(
     const upstream::DataSpec* data_spec,
     TriggerReason trigger,
     const util::Format* format,
-    ChunkExtractorWrapper* extractor_wrapper,
+    scoped_refptr<ChunkExtractorWrapper> extractor_wrapper,
     int parent_id)
     : Chunk(data_spec, kTypeMediaInitialization, trigger, format, parent_id),
       data_source_(data_source),

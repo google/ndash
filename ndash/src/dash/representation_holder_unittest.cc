@@ -79,21 +79,21 @@ std::unique_ptr<mpd::Representation> CreateTestRepresentation(size_t shift) {
 
 TEST(RepresentationHolderTest, Accessors) {
   extractor::MockExtractor* extractor = new extractor::MockExtractor();
-  chunk::ChunkExtractorWrapper* chunk_extractor_wrapper =
+  scoped_refptr<chunk::ChunkExtractorWrapper> chunk_extractor_wrapper(
       new chunk::ChunkExtractorWrapper(
-          std::unique_ptr<extractor::ExtractorInterface>(extractor));
+          std::unique_ptr<extractor::ExtractorInterface>(extractor)));
 
   std::unique_ptr<mpd::Representation> representation =
       CreateTestRepresentation(0);
 
   RepresentationHolder rh(kStartTime, kDuration, representation.get(),
-                          base::WrapUnique(chunk_extractor_wrapper));
+                          chunk_extractor_wrapper);
   const RepresentationHolder* rh_const = &rh;
 
-  EXPECT_THAT(rh.extractor_wrapper(), Eq(chunk_extractor_wrapper));
-  EXPECT_THAT(rh_const->extractor_wrapper(),
+  EXPECT_THAT(rh.extractor_wrapper().get(), Eq(chunk_extractor_wrapper.get()));
+  EXPECT_THAT(rh_const->extractor_wrapper().get(),
               Eq(const_cast<const chunk::ChunkExtractorWrapper*>(
-                  chunk_extractor_wrapper)));
+                  chunk_extractor_wrapper.get())));
   EXPECT_THAT(rh_const->representation(), Eq(representation.get()));
   EXPECT_THAT(rh_const->segment_index(), Eq(representation->GetIndex()));
   EXPECT_THAT(rh_const->media_format(), IsNull());
@@ -104,9 +104,9 @@ TEST(RepresentationHolderTest, UpdateRepresentation) {
   // each 2.5 seconds in duration and update the representation holder.
 
   extractor::MockExtractor* extractor = new extractor::MockExtractor();
-  chunk::ChunkExtractorWrapper* chunk_extractor_wrapper =
+  scoped_refptr<chunk::ChunkExtractorWrapper> chunk_extractor_wrapper(
       new chunk::ChunkExtractorWrapper(
-          std::unique_ptr<extractor::ExtractorInterface>(extractor));
+          std::unique_ptr<extractor::ExtractorInterface>(extractor)));
 
   // Live Window = 0,1,2,3,4,5
   std::unique_ptr<mpd::Representation> representation1 =
@@ -114,8 +114,7 @@ TEST(RepresentationHolderTest, UpdateRepresentation) {
 
   RepresentationHolder rh(base::TimeDelta::FromMilliseconds(0),
                           base::TimeDelta::FromMilliseconds(15000),
-                          representation1.get(),
-                          base::WrapUnique(chunk_extractor_wrapper));
+                          representation1.get(), chunk_extractor_wrapper);
 
   // Simulate an update with an adjacent representation starting from where
   // the old one left off.  Continuation, no overlap case.  Total period
@@ -128,9 +127,9 @@ TEST(RepresentationHolderTest, UpdateRepresentation) {
       base::TimeDelta::FromMilliseconds(30000), representation2.get());
 
   EXPECT_TRUE(success);
-  EXPECT_EQ(rh.GetFirstSegmentNum(), 0);
-  EXPECT_EQ(rh.GetFirstAvailableSegmentNum(), 0);
-  EXPECT_EQ(rh.GetLastSegmentNum(), 5);
+  EXPECT_EQ(6, rh.GetFirstSegmentNum());
+  EXPECT_EQ(6, rh.GetFirstAvailableSegmentNum());
+  EXPECT_EQ(11, rh.GetLastSegmentNum());
 
   // Simulate an update with an overlap at the half way point with the old
   // representation.  Total period duration increased by 7.5 seconds.
@@ -141,11 +140,10 @@ TEST(RepresentationHolderTest, UpdateRepresentation) {
                                     representation3.get());
   EXPECT_TRUE(success);
   // First available and last are still the same since we are simulating a
-  // live window and we can never see beyond those boundaries.  But this tests
-  // the shift tracking logic in the holder works properly.
-  EXPECT_EQ(rh.GetFirstSegmentNum(), 0);
-  EXPECT_EQ(rh.GetFirstAvailableSegmentNum(), 0);
-  EXPECT_EQ(rh.GetLastSegmentNum(), 5);
+  // live window and we can never see beyond those boundaries.
+  EXPECT_EQ(9, rh.GetFirstSegmentNum());
+  EXPECT_EQ(9, rh.GetFirstAvailableSegmentNum());
+  EXPECT_EQ(14, rh.GetLastSegmentNum());
 
   // Simulate an update that indicates we've fallen out of the live window
   // due to gap (we missed segment 15). Total period duration will be 52.5
@@ -160,29 +158,28 @@ TEST(RepresentationHolderTest, UpdateRepresentation) {
 
 TEST(RepresentationHolderTest, SegmentMethods) {
   extractor::MockExtractor* extractor = new extractor::MockExtractor();
-  chunk::ChunkExtractorWrapper* chunk_extractor_wrapper =
+  scoped_refptr<chunk::ChunkExtractorWrapper> chunk_extractor_wrapper(
       new chunk::ChunkExtractorWrapper(
-          std::unique_ptr<extractor::ExtractorInterface>(extractor));
+          std::unique_ptr<extractor::ExtractorInterface>(extractor)));
 
   std::unique_ptr<mpd::Representation> representation =
       CreateTestRepresentation(0);
 
   RepresentationHolder rh(base::TimeDelta::FromMilliseconds(0),
                           base::TimeDelta::FromMilliseconds(15000),
-                          representation.get(),
-                          base::WrapUnique(chunk_extractor_wrapper));
+                          representation.get(), chunk_extractor_wrapper);
 
   base::TimeDelta now;
-  EXPECT_EQ(rh.GetSegmentNum(now), 0);
+  EXPECT_EQ(0, rh.GetSegmentNum(now));
 
   now += base::TimeDelta::FromMilliseconds(2500);
-  EXPECT_EQ(rh.GetSegmentNum(now), 1);
+  EXPECT_EQ(1, rh.GetSegmentNum(now));
 
-  EXPECT_EQ(rh.GetSegmentStartTime(0), base::TimeDelta::FromMilliseconds(0));
-  EXPECT_EQ(rh.GetSegmentStartTime(1), base::TimeDelta::FromMilliseconds(2500));
+  EXPECT_EQ(base::TimeDelta::FromMilliseconds(0), rh.GetSegmentStartTime(0));
+  EXPECT_EQ(base::TimeDelta::FromMilliseconds(2500), rh.GetSegmentStartTime(1));
 
-  EXPECT_EQ(rh.GetSegmentEndTime(0), base::TimeDelta::FromMilliseconds(2500));
-  EXPECT_EQ(rh.GetSegmentEndTime(1), base::TimeDelta::FromMilliseconds(5000));
+  EXPECT_EQ(base::TimeDelta::FromMilliseconds(2500), rh.GetSegmentEndTime(0));
+  EXPECT_EQ(base::TimeDelta::FromMilliseconds(5000), rh.GetSegmentEndTime(1));
 
   EXPECT_FALSE(rh.IsBeyondLastSegment(5));
   EXPECT_TRUE(rh.IsBeyondLastSegment(6));
@@ -190,11 +187,11 @@ TEST(RepresentationHolderTest, SegmentMethods) {
   EXPECT_FALSE(rh.IsBeforeFirstSegment(0));
   EXPECT_TRUE(rh.IsBeforeFirstSegment(-1));
 
-  EXPECT_EQ(rh.GetLastSegmentNum(), 5);
-  EXPECT_EQ(rh.GetFirstSegmentNum(), 0);
-  EXPECT_EQ(rh.GetFirstAvailableSegmentNum(), 0);
-  EXPECT_EQ(rh.GetSegmentUri(0)->GetUriString(), "http://media/segment/1/0/");
-  EXPECT_EQ(rh.GetSegmentUri(1)->GetUriString(), "http://media/segment/1/1/");
+  EXPECT_EQ(5, rh.GetLastSegmentNum());
+  EXPECT_EQ(0, rh.GetFirstSegmentNum());
+  EXPECT_EQ(0, rh.GetFirstAvailableSegmentNum());
+  EXPECT_EQ("http://media/segment/1/0/", rh.GetSegmentUri(0)->GetUriString());
+  EXPECT_EQ("http://media/segment/1/1/", rh.GetSegmentUri(1)->GetUriString());
 }
 
 }  // namespace dash

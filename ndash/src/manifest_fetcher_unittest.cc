@@ -49,9 +49,9 @@ TEST(ManifestFetcherTests, RequestRefreshTest) {
     }
     void OnManifestRefreshStarted() override { refresh_started_called_ = true; }
     void OnManifestRefreshed() override {
-      const mpd::MediaPresentationDescription* mpd;
-      mpd = fetcher_->GetManifest();
-      if (mpd != nullptr) {
+      const scoped_refptr<mpd::MediaPresentationDescription> mpd =
+          fetcher_->GetManifest();
+      if (mpd.get() != nullptr) {
         EXPECT_TRUE(mpd->GetPeriodCount() > 0);
         EXPECT_TRUE(refresh_started_called_);
         manifest_was_refreshed_ = true;

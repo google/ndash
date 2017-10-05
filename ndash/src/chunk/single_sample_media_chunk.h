@@ -68,7 +68,7 @@ class SingleSampleMediaChunk : public BaseMediaChunk {
       int64_t start_time_us,
       int64_t end_time_us,
       int32_t chunk_index,
-      const MediaFormat* sample_format,
+      std::unique_ptr<const MediaFormat> sample_format,
       scoped_refptr<const drm::RefCountedDrmInitData> sample_drm_init_data,
       int parent_id);
   ~SingleSampleMediaChunk() override;
@@ -88,7 +88,7 @@ class SingleSampleMediaChunk : public BaseMediaChunk {
 
  private:
   upstream::DataSourceInterface* data_source_;
-  const MediaFormat* sample_format_;
+  std::unique_ptr<const MediaFormat> sample_format_;
   scoped_refptr<const drm::RefCountedDrmInitData> sample_drm_init_data_;
 
   mutable base::Lock lock_;

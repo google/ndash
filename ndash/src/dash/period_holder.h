@@ -123,7 +123,9 @@ class PeriodHolder {
                     int32_t manifest_index,
                     const TrackCriteria* track_criteria);
 
-  // For when any representation will do
+  // For when any representation will do. This pointer is only valid for the
+  // current DashThread task.  It is not safe to store it since DashThread
+  // update may cause it to become invalid before the next tasks's execution.
   const mpd::DashSegmentIndexInterface* GetArbitrarySegmentIndex() const;
 
  private:

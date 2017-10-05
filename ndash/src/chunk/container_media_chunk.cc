@@ -39,8 +39,8 @@ ContainerMediaChunk::ContainerMediaChunk(
     int64_t end_time_us,
     int32_t chunk_index,
     base::TimeDelta sample_offset,
-    ChunkExtractorWrapper* extractor_wrapper,
-    const MediaFormat* media_format,
+    scoped_refptr<ChunkExtractorWrapper> extractor_wrapper,
+    std::unique_ptr<const MediaFormat> media_format,
     scoped_refptr<const drm::RefCountedDrmInitData> drm_init_data,
     bool is_media_format_final,
     int parent_id)
@@ -55,7 +55,8 @@ ContainerMediaChunk::ContainerMediaChunk(
       data_source_(data_source),
       extractor_wrapper_(extractor_wrapper),
       sample_offset_(sample_offset),
-      media_format_(GetAdjustedMediaFormat(media_format, sample_offset)),
+      media_format_(
+          GetAdjustedMediaFormat(std::move(media_format), sample_offset)),
       drm_init_data_(std::move(drm_init_data)) {}
 
 ContainerMediaChunk::~ContainerMediaChunk() {}
@@ -151,7 +152,8 @@ void ContainerMediaChunk::SetDrmInitData(
 }
 void ContainerMediaChunk::GiveFormat(
     std::unique_ptr<const MediaFormat> media_format) {
-  media_format_ = GetAdjustedMediaFormat(media_format.get(), sample_offset_);
+  media_format_ =
+      GetAdjustedMediaFormat(std::move(media_format), sample_offset_);
   if (!format_given_cb_.is_null()) {
     format_given_cb_.Run(media_format_.get());
   }
@@ -198,12 +200,12 @@ void ContainerMediaChunk::GiveSeekMap(
   // Do nothing.
 }
 
-std::unique_ptr<MediaFormat> ContainerMediaChunk::GetAdjustedMediaFormat(
-    const MediaFormat* format,
+std::unique_ptr<const MediaFormat> ContainerMediaChunk::GetAdjustedMediaFormat(
+    std::unique_ptr<const MediaFormat> format,
     base::TimeDelta sample_offset) {
-  std::unique_ptr<MediaFormat> out;
+  std::unique_ptr<const MediaFormat> out;
 
-  if (format == nullptr) {
+  if (!format.get()) {
     return out;
   }
 
@@ -212,9 +214,7 @@ std::unique_ptr<MediaFormat> ContainerMediaChunk::GetAdjustedMediaFormat(
     out = format->CopyWithSubsampleOffsetUs(format->GetSubsampleOffsetUs() +
                                             sample_offset.InMicroseconds());
   } else {
-    // Just make a simple copy of the format.
-    // TODO(adewhurst): See if we can avoid copying MediaFormat
-    out.reset(new MediaFormat(*format));
+    out = std::move(format);
   }
 
   return out;
