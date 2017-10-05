@@ -16,12 +16,8 @@
 
 #include "manifest_fetcher.h"
 
-#include <algorithm>
-#include <string>
-
 #include "base/bind.h"
 #include "base/callback_helpers.h"
-#include "base/location.h"
 #include "upstream/constants.h"
 #include "upstream/curl_data_source.h"
 #include "upstream/data_spec.h"
@@ -91,8 +87,9 @@ void ManifestFetcher::UpdateManifestUri(const std::string& manifest_uri) {
   manifest_uri_ = manifest_uri;
 }
 
-const mpd::MediaPresentationDescription* ManifestFetcher::GetManifest() const {
-  return manifest_.get();
+const scoped_refptr<mpd::MediaPresentationDescription>
+ManifestFetcher::GetManifest() const {
+  return manifest_;
 }
 
 base::TimeTicks ManifestFetcher::GetManifestLoadStartTimestamp() const {

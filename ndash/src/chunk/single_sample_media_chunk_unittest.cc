@@ -69,12 +69,13 @@ TEST(SingleSampleMediaChunkTest, Accessors) {
   util::Format format("", "", 0, 0, 0.0, 1, 0, 0, 0);
   std::unique_ptr<MediaFormat> sample_format =
       MediaFormat::CreateTextFormat("track", "text/plain", 100, 5000);
+  MediaFormat* sample_format_ptr = sample_format.get();
   drm::MockDrmInitData* drm_init_data = new drm::MockDrmInitData;
   scoped_refptr<drm::RefCountedDrmInitData> drm_init_data_ref(drm_init_data);
 
   SingleSampleMediaChunk ss_chunk(
       &data_source, &data_spec, Chunk::kTriggerUnspecified, &format, kStartTime,
-      kEndTime, kChunkIndex, sample_format.get(), drm_init_data_ref,
+      kEndTime, kChunkIndex, std::move(sample_format), drm_init_data_ref,
       Chunk::kNoParentId);
 
   EXPECT_THAT(*ss_chunk.data_spec(),
@@ -83,7 +84,7 @@ TEST(SingleSampleMediaChunkTest, Accessors) {
   EXPECT_THAT(ss_chunk.start_time_us(), Eq(kStartTime));
   EXPECT_THAT(ss_chunk.end_time_us(), Eq(kEndTime));
   EXPECT_THAT(ss_chunk.chunk_index(), Eq(kChunkIndex));
-  EXPECT_THAT(ss_chunk.GetMediaFormat(), Eq(sample_format.get()));
+  EXPECT_THAT(ss_chunk.GetMediaFormat(), Eq(sample_format_ptr));
   EXPECT_THAT(ss_chunk.GetDrmInitData(), Eq(drm_init_data_ref));
   EXPECT_THAT(ss_chunk.parent_id(), Eq(Chunk::kNoParentId));
   EXPECT_THAT(ss_chunk.GetNumBytesLoaded(), Eq(0));
@@ -102,7 +103,7 @@ TEST(SingleSampleMediaChunkTest, TestLoadSuccess) {
 
   SingleSampleMediaChunk ss_chunk(
       &data_source, &data_spec, Chunk::kTriggerUnspecified, &format, kStartTime,
-      kEndTime, kChunkIndex, sample_format.get(), drm_init_data_ref,
+      kEndTime, kChunkIndex, std::move(sample_format), drm_init_data_ref,
       Chunk::kNoParentId);
 
   extractor::MockIndexedTrackOutput mock_output;
@@ -156,7 +157,7 @@ TEST(SingleSampleMediaChunkTest, TestLoadFail) {
 
   SingleSampleMediaChunk ss_chunk(
       &data_source, &data_spec, Chunk::kTriggerUnspecified, &format, kStartTime,
-      kEndTime, kChunkIndex, sample_format.get(), drm_init_data_ref,
+      kEndTime, kChunkIndex, std::move(sample_format), drm_init_data_ref,
       Chunk::kNoParentId);
 
   extractor::MockIndexedTrackOutput mock_output;
@@ -201,7 +202,7 @@ TEST(SingleSampleMediaChunkTest, TestLoadCancel) {
 
   SingleSampleMediaChunk ss_chunk(
       &data_source, &data_spec, Chunk::kTriggerUnspecified, &format, kStartTime,
-      kEndTime, kChunkIndex, sample_format.get(), drm_init_data_ref,
+      kEndTime, kChunkIndex, std::move(sample_format), drm_init_data_ref,
       Chunk::kNoParentId);
 
   extractor::MockIndexedTrackOutput mock_output;

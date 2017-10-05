@@ -27,10 +27,10 @@
 namespace ndash {
 namespace chunk {
 
-using ::testing::_;
 using ::testing::Eq;
 using ::testing::IsNull;
 using ::testing::Return;
+using ::testing::_;
 
 TEST(InitializationChunkTest, CanInstantiateMock) {
   upstream::Uri dummy_uri("dummy://");
@@ -101,14 +101,15 @@ TEST(InitializationChunkTest, TestLoad) {
   extractor::MockExtractor* mock_extractor =
       static_cast<extractor::MockExtractor*>(extractor_interface.get());
 
-  ChunkExtractorWrapper wrapper(std::move(extractor_interface));
+  scoped_refptr<ChunkExtractorWrapper> wrapper(
+      new ChunkExtractorWrapper(std::move(extractor_interface)));
 
   InitializationChunk init_chunk(&data_source, &data_spec,
-                                 Chunk::kTriggerUnspecified, nullptr, &wrapper,
+                                 Chunk::kTriggerUnspecified, nullptr, wrapper,
                                  Chunk::kNoParentId);
 
   EXPECT_CALL(data_source, Open(_, _)).WillOnce(Return(0));
-  EXPECT_CALL(*mock_extractor, Init(&wrapper)).WillOnce(Return());
+  EXPECT_CALL(*mock_extractor, Init(wrapper.get())).WillOnce(Return());
   EXPECT_CALL(data_source, Close()).WillOnce(Return());
 
   EXPECT_CALL(*mock_extractor, Read(_, _))

@@ -89,8 +89,8 @@ class ContainerMediaChunk : public BaseMediaChunk,
       int64_t end_time_us,
       int32_t chunk_index,
       base::TimeDelta sample_offset,
-      ChunkExtractorWrapper* extractor_wrapper,
-      const MediaFormat* media_format,
+      scoped_refptr<ChunkExtractorWrapper> extractor_wrapper,
+      std::unique_ptr<const MediaFormat> media_format,
       scoped_refptr<const drm::RefCountedDrmInitData> drm_init_data,
       bool is_media_format_final,
       int parent_id);
@@ -139,7 +139,7 @@ class ContainerMediaChunk : public BaseMediaChunk,
  private:
   // Only accessed by loader thread, so no locking required
   upstream::DataSourceInterface* data_source_;
-  ChunkExtractorWrapper* extractor_wrapper_;
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper_;
 
   // No locking required with these because they're const
   const base::TimeDelta sample_offset_;
@@ -153,8 +153,8 @@ class ContainerMediaChunk : public BaseMediaChunk,
   int64_t bytes_loaded_ = 0;
   base::CancellationFlag load_canceled_;
 
-  static std::unique_ptr<MediaFormat> GetAdjustedMediaFormat(
-      const MediaFormat* format,
+  static std::unique_ptr<const MediaFormat> GetAdjustedMediaFormat(
+      std::unique_ptr<const MediaFormat>,
       base::TimeDelta sample_offset);
 };
 

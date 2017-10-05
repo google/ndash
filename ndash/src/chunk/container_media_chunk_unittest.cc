@@ -38,17 +38,17 @@
 namespace ndash {
 namespace chunk {
 
-using ::testing::_;
-using ::testing::Eq;
-using ::testing::IsNull;
-using ::testing::Ne;
 using ::testing::ByRef;
+using ::testing::Eq;
 using ::testing::Invoke;
-using ::testing::Return;
+using ::testing::IsNull;
 using ::testing::Mock;
-using ::testing::Sequence;
-using ::testing::SaveArg;
+using ::testing::Ne;
 using ::testing::Pointee;
+using ::testing::Return;
+using ::testing::SaveArg;
+using ::testing::Sequence;
+using ::testing::_;
 
 TEST(ContainerMediaChunkTest, Accessors) {
   upstream::Uri dummy_uri("dummy://");
@@ -63,25 +63,33 @@ TEST(ContainerMediaChunkTest, Accessors) {
       base::TimeDelta::FromMicroseconds(80);
   const base::TimeDelta kSampleOffsetTotal =
       kSampleOffsetBase + kSampleOffsetFormat;
-  const std::unique_ptr<const MediaFormat> media_format(
+  std::unique_ptr<const MediaFormat> media_format(
       MediaFormat::CreateVideoFormat("1", "video/mp4", "h264", 2200000, 32768,
                                      1234567, 640, 480, nullptr, 16, 45,
                                      1.666));
+  const MediaFormat* media_format_ptr = media_format.get();
+  const std::unique_ptr<MediaFormat> media_format_so =
+      media_format_ptr->CopyWithSubsampleOffsetUs(
+          kSampleOffsetFormat.InMicroseconds());
+  const std::unique_ptr<MediaFormat> media_format_so_updated =
+      media_format_ptr->CopyWithSubsampleOffsetUs(
+          kSampleOffsetTotal.InMicroseconds());
 
   drm::MockDrmInitData* drm_init_data = new drm::MockDrmInitData;
   scoped_refptr<drm::RefCountedDrmInitData> drm_init_data_ref(drm_init_data);
   upstream::MockDataSource data_source;
   extractor::MockExtractor* mock_extractor = new extractor::MockExtractor;
   std::unique_ptr<extractor::ExtractorInterface> extractor(mock_extractor);
-  ChunkExtractorWrapper extractor_wrapper(std::move(extractor));
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper(
+      new ChunkExtractorWrapper(std::move(extractor)));
 
   ContainerMediaChunk cmc(&data_source, &data_spec, Chunk::kTriggerUnspecified,
                           &format, kTestStartTime, kTestEndTime,
-                          kTestChunkIndex, kSampleOffsetBase,
-                          &extractor_wrapper, media_format.get(), drm_init_data,
-                          true, Chunk::kNoParentId);
+                          kTestChunkIndex, kSampleOffsetBase, extractor_wrapper,
+                          std::move(media_format), drm_init_data, true,
+                          Chunk::kNoParentId);
 
-  EXPECT_THAT(cmc.GetMediaFormat(), Pointee(Eq(ByRef(*media_format))));
+  EXPECT_THAT(cmc.GetMediaFormat(), media_format_ptr);
   EXPECT_THAT(cmc.GetDrmInitData(), Eq(drm_init_data));
   EXPECT_THAT(cmc.GetNumBytesLoaded(), Eq(0));
   EXPECT_THAT(cmc.IsLoadCanceled(), Eq(false));
@@ -91,13 +99,6 @@ TEST(ContainerMediaChunkTest, Accessors) {
 
   cmc.GiveFormat(nullptr);
   EXPECT_THAT(cmc.GetMediaFormat(), IsNull());
-
-  const std::unique_ptr<MediaFormat> media_format_so =
-      media_format->CopyWithSubsampleOffsetUs(
-          kSampleOffsetFormat.InMicroseconds());
-  const std::unique_ptr<MediaFormat> media_format_so_updated =
-      media_format->CopyWithSubsampleOffsetUs(
-          kSampleOffsetTotal.InMicroseconds());
 
   cmc.GiveFormat(
       std::unique_ptr<const MediaFormat>(new MediaFormat(*media_format_so)));
@@ -115,12 +116,13 @@ TEST(ContainerMediaChunkTest, TrackOutputPassthru) {
 
   extractor::MockExtractor* mock_extractor = new extractor::MockExtractor;
   std::unique_ptr<extractor::ExtractorInterface> extractor(mock_extractor);
-  ChunkExtractorWrapper extractor_wrapper(std::move(extractor));
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper(
+      new ChunkExtractorWrapper(std::move(extractor)));
 
-  ContainerMediaChunk cmc(
-      nullptr, &data_spec, Chunk::kTriggerUnspecified, &format, kTestStartTime,
-      kTestEndTime, kTestChunkIndex, base::TimeDelta(), &extractor_wrapper,
-      nullptr, nullptr, true, Chunk::kNoParentId);
+  ContainerMediaChunk cmc(nullptr, &data_spec, Chunk::kTriggerUnspecified,
+                          &format, kTestStartTime, kTestEndTime,
+                          kTestChunkIndex, base::TimeDelta(), extractor_wrapper,
+                          nullptr, nullptr, true, Chunk::kNoParentId);
 
   extractor::MockExtractorInput extractor_input;
   constexpr size_t kMaxLength = 678;
@@ -168,7 +170,7 @@ TEST(ContainerMediaChunkTest, TestLoadSuccess) {
   constexpr int64_t kTestEndTime = 2;
   constexpr int32_t kTestChunkIndex = 3;
   const base::TimeDelta kSampleOffset = base::TimeDelta::FromMicroseconds(5000);
-  const std::unique_ptr<MediaFormat> media_format =
+  std::unique_ptr<MediaFormat> media_format =
       MediaFormat::CreateVideoFormat("1", "video/mp4", "h264", 2200000, 32768,
                                      1234567, 640, 480, nullptr, 16, 45, 1.666);
   constexpr ssize_t kReadSize = 888;
@@ -176,12 +178,13 @@ TEST(ContainerMediaChunkTest, TestLoadSuccess) {
   upstream::MockDataSource data_source;
   extractor::MockExtractor* mock_extractor = new extractor::MockExtractor;
   std::unique_ptr<extractor::ExtractorInterface> extractor(mock_extractor);
-  ChunkExtractorWrapper extractor_wrapper(std::move(extractor));
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper(
+      new ChunkExtractorWrapper(std::move(extractor)));
 
   ContainerMediaChunk cmc(&data_source, &data_spec, Chunk::kTriggerUnspecified,
                           &format, kTestStartTime, kTestEndTime,
-                          kTestChunkIndex, kSampleOffset, &extractor_wrapper,
-                          media_format.get(), nullptr, true,
+                          kTestChunkIndex, kSampleOffset, extractor_wrapper,
+                          std::move(media_format), nullptr, true,
                           Chunk::kNoParentId);
 
   Sequence seq;
@@ -190,7 +193,7 @@ TEST(ContainerMediaChunkTest, TestLoadSuccess) {
   EXPECT_CALL(data_source, Open(DebugStringEquals(data_spec.DebugString()), _))
       .InSequence(seq)
       .WillOnce(Return(0));
-  EXPECT_CALL(*mock_extractor, Init(&extractor_wrapper))
+  EXPECT_CALL(*mock_extractor, Init(extractor_wrapper.get()))
       .InSequence(seq)
       .WillOnce(Return());
   EXPECT_CALL(*mock_extractor, Read(_, IsNull()))
@@ -228,20 +231,21 @@ TEST(ContainerMediaChunkTest, TestLoadFail) {
   constexpr int64_t kTestEndTime = 2;
   constexpr int32_t kTestChunkIndex = 3;
   const base::TimeDelta kSampleOffset = base::TimeDelta::FromMicroseconds(5000);
-  const std::unique_ptr<MediaFormat> media_format =
-      MediaFormat::CreateVideoFormat("1", "video/mp4", "h264", 2200000, 32768,
-                                     1234567, 640, 480, nullptr, 16, 45, 1.666);
+  std::unique_ptr<MediaFormat> media_format(MediaFormat::CreateVideoFormat(
+      "1", "video/mp4", "h264", 2200000, 32768, 1234567, 640, 480, nullptr, 16,
+      45, 1.666));
   constexpr ssize_t kReadSize = 888;
 
   upstream::MockDataSource data_source;
   extractor::MockExtractor* mock_extractor = new extractor::MockExtractor;
   std::unique_ptr<extractor::ExtractorInterface> extractor(mock_extractor);
-  ChunkExtractorWrapper extractor_wrapper(std::move(extractor));
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper(
+      new ChunkExtractorWrapper(std::move(extractor)));
 
   ContainerMediaChunk cmc(&data_source, &data_spec, Chunk::kTriggerUnspecified,
                           &format, kTestStartTime, kTestEndTime,
-                          kTestChunkIndex, kSampleOffset, &extractor_wrapper,
-                          media_format.get(), nullptr, true,
+                          kTestChunkIndex, kSampleOffset, extractor_wrapper,
+                          std::move(media_format), nullptr, true,
                           Chunk::kNoParentId);
 
   Sequence seq;
@@ -250,7 +254,7 @@ TEST(ContainerMediaChunkTest, TestLoadFail) {
   EXPECT_CALL(data_source, Open(DebugStringEquals(data_spec.DebugString()), _))
       .InSequence(seq)
       .WillOnce(Return(0));
-  EXPECT_CALL(*mock_extractor, Init(&extractor_wrapper))
+  EXPECT_CALL(*mock_extractor, Init(extractor_wrapper.get()))
       .InSequence(seq)
       .WillOnce(Return());
   EXPECT_CALL(*mock_extractor, Read(_, IsNull()))
@@ -288,20 +292,21 @@ TEST(ContainerMediaChunkTest, TestLoadCancel) {
   constexpr int64_t kTestEndTime = 2;
   constexpr int32_t kTestChunkIndex = 3;
   const base::TimeDelta kSampleOffset = base::TimeDelta::FromMicroseconds(5000);
-  const std::unique_ptr<MediaFormat> media_format =
-      MediaFormat::CreateVideoFormat("1", "video/mp4", "h264", 2200000, 32768,
-                                     1234567, 640, 480, nullptr, 16, 45, 1.666);
+  std::unique_ptr<MediaFormat> media_format(MediaFormat::CreateVideoFormat(
+      "1", "video/mp4", "h264", 2200000, 32768, 1234567, 640, 480, nullptr, 16,
+      45, 1.666));
   constexpr ssize_t kReadSize = 888;
 
   upstream::MockDataSource data_source;
   extractor::MockExtractor* mock_extractor = new extractor::MockExtractor;
   std::unique_ptr<extractor::ExtractorInterface> extractor(mock_extractor);
-  ChunkExtractorWrapper extractor_wrapper(std::move(extractor));
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper(
+      new ChunkExtractorWrapper(std::move(extractor)));
 
   ContainerMediaChunk cmc(&data_source, &data_spec, Chunk::kTriggerUnspecified,
                           &format, kTestStartTime, kTestEndTime,
-                          kTestChunkIndex, kSampleOffset, &extractor_wrapper,
-                          media_format.get(), nullptr, true,
+                          kTestChunkIndex, kSampleOffset, extractor_wrapper,
+                          std::move(media_format), nullptr, true,
                           Chunk::kNoParentId);
 
   Sequence seq;
@@ -310,7 +315,7 @@ TEST(ContainerMediaChunkTest, TestLoadCancel) {
   EXPECT_CALL(data_source, Open(DebugStringEquals(data_spec.DebugString()), _))
       .InSequence(seq)
       .WillOnce(Return(0));
-  EXPECT_CALL(*mock_extractor, Init(&extractor_wrapper))
+  EXPECT_CALL(*mock_extractor, Init(extractor_wrapper.get()))
       .InSequence(seq)
       .WillOnce(Return());
   EXPECT_CALL(*mock_extractor, Read(_, IsNull()))

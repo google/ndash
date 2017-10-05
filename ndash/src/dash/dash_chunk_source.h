@@ -178,27 +178,29 @@ class DashChunkSource : public chunk::ChunkSourceInterface {
   friend class DashChunkSourceTest;
 
   // For TESTING
-  DashChunkSource(drm::DrmSessionManagerInterface* drm_session_manager,
-                  const mpd::MediaPresentationDescription* manifest,
-                  upstream::DataSourceInterface* data_source,
-                  chunk::FormatEvaluatorInterface* adaptive_format_evaluator,
-                  const mpd::AdaptationType& adaptation_type,
-                  const PlaybackRate* playback_rate,
-                  qoe::QoeManager* qoe = nullptr);
+  DashChunkSource(
+      drm::DrmSessionManagerInterface* drm_session_manager,
+      scoped_refptr<const mpd::MediaPresentationDescription> manifest,
+      upstream::DataSourceInterface* data_source,
+      chunk::FormatEvaluatorInterface* adaptive_format_evaluator,
+      const mpd::AdaptationType& adaptation_type,
+      const PlaybackRate* playback_rate,
+      qoe::QoeManager* qoe = nullptr);
 
-  DashChunkSource(drm::DrmSessionManagerInterface* drm_session_manager,
-                  ManifestFetcher* manifest_fetcher,
-                  const mpd::MediaPresentationDescription* initial_manifest,
-                  upstream::DataSourceInterface* data_source,
-                  chunk::FormatEvaluatorInterface* adaptive_format_evaluator,
-                  const mpd::AdaptationType& adaptation_type,
-                  std::unique_ptr<base::TickClock> clock,
-                  base::TimeDelta live_edge_latency,
-                  base::TimeDelta elapsed_realtime_offset,
-                  bool start_at_live_edge,
-                  AvailableRangeChangedCB range_changed_cb,
-                  const PlaybackRate* playback_rate,
-                  qoe::QoeManager* qoe = nullptr);
+  DashChunkSource(
+      drm::DrmSessionManagerInterface* drm_session_manager,
+      ManifestFetcher* manifest_fetcher,
+      scoped_refptr<const mpd::MediaPresentationDescription> initial_manifest,
+      upstream::DataSourceInterface* data_source,
+      chunk::FormatEvaluatorInterface* adaptive_format_evaluator,
+      const mpd::AdaptationType& adaptation_type,
+      std::unique_ptr<base::TickClock> clock,
+      base::TimeDelta live_edge_latency,
+      base::TimeDelta elapsed_realtime_offset,
+      bool start_at_live_edge,
+      AvailableRangeChangedCB range_changed_cb,
+      const PlaybackRate* playback_rate,
+      qoe::QoeManager* qoe = nullptr);
 
   static std::unique_ptr<MediaFormat> GetTrackFormat(
       mpd::AdaptationType adaptation_set_type,
@@ -214,7 +216,7 @@ class DashChunkSource : public chunk::ChunkSourceInterface {
       const mpd::RangedUri* initialization_uri,
       const mpd::RangedUri* index_uri,
       const mpd::Representation& representation,
-      chunk::ChunkExtractorWrapper* extractor,
+      scoped_refptr<chunk::ChunkExtractorWrapper> extractor,
       upstream::DataSourceInterface* data_source,
       int32_t manifest_index,
       chunk::Chunk::TriggerReason trigger,
@@ -224,7 +226,7 @@ class DashChunkSource : public chunk::ChunkSourceInterface {
       const PeriodHolder& period_holder,
       RepresentationHolder* representation_holder,
       upstream::DataSourceInterface* data_source,
-      const MediaFormat* media_format,
+      std::unique_ptr<const MediaFormat> media_format,
       int32_t segment_num,
       chunk::Chunk::TriggerReason trigger,
       chunk::Chunk::FormatGivenCB format_given_cb);
@@ -238,7 +240,8 @@ class DashChunkSource : public chunk::ChunkSourceInterface {
   PeriodHolder* FindPeriodHolder(base::TimeDelta position);
   const PeriodHolder* FindPeriodHolder(base::TimeDelta position) const;
 
-  void ProcessManifest(const mpd::MediaPresentationDescription* manifest);
+  void ProcessManifest(
+      scoped_refptr<const mpd::MediaPresentationDescription> manifest);
 
   void NotifyAvailableRangeChanged(const TimeRangeInterface& seek_range);
 

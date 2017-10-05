@@ -273,6 +273,8 @@ class DashThread : public base::Thread,
 
   void SetState(PlayerState new_state);
 
+  // NOTE: Caller should copy format if contents are required beyond the scope
+  // of the current executing task.
   void FormatGiven(TrackContext* track, const MediaFormat* format);
 
   void NewBandwidthEstimate(base::TimeDelta elapsed,

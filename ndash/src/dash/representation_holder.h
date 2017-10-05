@@ -17,6 +17,7 @@
 #ifndef NDASH_DASH_REPRESENTATION_HOLDER_H_
 #define NDASH_DASH_REPRESENTATION_HOLDER_H_
 
+#include <base/memory/ref_counted.h>
 #include <cstdint>
 #include <memory>
 
@@ -45,24 +46,30 @@ class RepresentationHolder {
       base::TimeDelta period_start_time,
       base::TimeDelta period_duration,
       const mpd::Representation* representation,
-      std::unique_ptr<chunk::ChunkExtractorWrapper> extractor_wrapper);
+      scoped_refptr<chunk::ChunkExtractorWrapper> extractor_wrapper);
   ~RepresentationHolder();
 
-  const chunk::ChunkExtractorWrapper* extractor_wrapper() const {
+  const scoped_refptr<chunk::ChunkExtractorWrapper> extractor_wrapper() const {
     return extractor_wrapper_.get();
   }
 
-  chunk::ChunkExtractorWrapper* extractor_wrapper() {
+  scoped_refptr<chunk::ChunkExtractorWrapper> extractor_wrapper() {
     return extractor_wrapper_.get();
   }
 
   const mpd::Representation* representation() const { return representation_; }
 
+  // This pointer is only valid for the current DashThread task.  It is not
+  // safe to store it since DashThread update may cause it to become invalid
+  // before the next tasks's execution.
   const mpd::DashSegmentIndexInterface* segment_index() const {
     return segment_index_;
   }
 
-  const MediaFormat* media_format() const { return media_format_; }
+  // This pointer is only valid for the current DashThread task.  It is not
+  // safe to store it since DashThread update may cause it to become invalid
+  // before the next tasks's execution.
+  const MediaFormat* media_format() const { return media_format_.get(); }
 
   void GiveMediaFormat(std::unique_ptr<const MediaFormat> media_format);
   void GiveSegmentIndex(
@@ -89,14 +96,13 @@ class RepresentationHolder {
   base::TimeDelta period_duration_;
   int32_t segment_num_shift_ = 0;
 
-  const std::unique_ptr<chunk::ChunkExtractorWrapper> extractor_wrapper_;
+  const scoped_refptr<chunk::ChunkExtractorWrapper> extractor_wrapper_;
 
   const mpd::Representation* representation_;
 
-  std::unique_ptr<const MediaFormat> owned_media_format_;
   std::unique_ptr<const mpd::DashSegmentIndexInterface> owned_segment_index_;
 
-  const MediaFormat* media_format_ = nullptr;
+  std::unique_ptr<const MediaFormat> media_format_;
   const mpd::DashSegmentIndexInterface* segment_index_;
 
   RepresentationHolder(const RepresentationHolder& other) = delete;

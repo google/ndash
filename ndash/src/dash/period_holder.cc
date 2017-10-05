@@ -17,12 +17,7 @@
 #include "dash/period_holder.h"
 
 #include <algorithm>
-#include <cstdint>
-#include <map>
-#include <memory>
 #include <set>
-#include <string>
-#include <vector>
 
 #include "base/strings/pattern.h"
 #include "base/time/time.h"
@@ -172,7 +167,7 @@ PeriodHolder::PeriodHolder(drm::DrmSessionManagerInterface* drm_session_manager,
     const mpd::Representation* representation =
         adaptation_set->GetRepresentation(index);
 
-    std::unique_ptr<chunk::ChunkExtractorWrapper> chunk_extractor;
+    scoped_refptr<chunk::ChunkExtractorWrapper> chunk_extractor;
     if (adaptation_set->GetType() == mpd::AdaptationType::AUDIO ||
         adaptation_set->GetType() == mpd::AdaptationType::VIDEO) {
       std::set<int> audio_object_types;
@@ -189,8 +184,7 @@ PeriodHolder::PeriodHolder(drm::DrmSessionManagerInterface* drm_session_manager,
           new extractor::StreamParserExtractor(drm_session_manager_,
                                                std::move(stream_parser),
                                                media_log, playback_rate < 0));
-      chunk_extractor.reset(
-          new chunk::ChunkExtractorWrapper(std::move(extractor)));
+      chunk_extractor = new chunk::ChunkExtractorWrapper(std::move(extractor));
     } else if (adaptation_set->GetType() == mpd::AdaptationType::TEXT) {
       // For VOD assets with ad insertion, DataGen will send us a closed
       // caption stream (in rawcc format) that represents the entire
@@ -246,14 +240,12 @@ PeriodHolder::PeriodHolder(drm::DrmSessionManagerInterface* drm_session_manager,
       std::unique_ptr<extractor::ExtractorInterface> extractor(
           new extractor::RawCCParserExtractor(
               sample_offset, std::move(trunc_start), std::move(trunc_end)));
-      chunk_extractor.reset(
-          new chunk::ChunkExtractorWrapper(std::move(extractor)));
+      chunk_extractor = new chunk::ChunkExtractorWrapper(std::move(extractor));
     }
     representation_holders_.insert(std::make_pair(
         representation->GetFormat().GetId(),
         std::unique_ptr<RepresentationHolder>(new RepresentationHolder(
-            start_time_, period_duration, representation,
-            std::move(chunk_extractor)))));
+            start_time_, period_duration, representation, chunk_extractor))));
   }
   UpdateRepresentationIndependentProperties(
       period_duration,

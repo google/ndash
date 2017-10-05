@@ -67,7 +67,7 @@ class InitializationChunk : public Chunk, public SingleTrackOutputInterface {
                       const upstream::DataSpec* data_spec,
                       TriggerReason trigger,
                       const util::Format* format,
-                      ChunkExtractorWrapper* extractor_wrapper,
+                      scoped_refptr<ChunkExtractorWrapper> extractor_wrapper,
                       int parent_id = kNoParentId);
   ~InitializationChunk() override;
 
@@ -142,7 +142,7 @@ class InitializationChunk : public Chunk, public SingleTrackOutputInterface {
  private:
   // Only accessed by loader thread, so no locking required
   upstream::DataSourceInterface* data_source_;
-  ChunkExtractorWrapper* extractor_wrapper_;
+  scoped_refptr<ChunkExtractorWrapper> extractor_wrapper_;
 
   // Initialization results. Set by the loader thread and read by any thread
   // that knows loading has completed. These variables do not need a lock,
