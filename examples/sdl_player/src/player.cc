@@ -21,9 +21,9 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
-#include <ndash.h>
 #include <gflags/gflags.h>
 #include <glog/logging.h>
+#include <ndash.h>
 #include <values.h>
 
 #include "frame_source_queue.h"
@@ -38,12 +38,13 @@ namespace {
 
 constexpr std::chrono::milliseconds kMaxAudioDriftTime(20);
 
-constexpr int playback_rates[] =
-    { -240, -120, -60, -15, -4, 1, 4, 15, 60, 120, 240 };
+constexpr int kPlaybackRates[] = {-240, -120, -60, -15, -4, 1,
+                                  4,    15,   60,  120, 240};
 
 constexpr int kNormalRateIndex = 5;
 constexpr int kMinRateIndex = 0;
 constexpr int kMaxRateIndex = 10;
+constexpr int kMinWindowWidth = 640;
 
 typedef std::chrono::high_resolution_clock::time_point TimePoint;
 typedef std::chrono::high_resolution_clock::duration Duration;
@@ -52,11 +53,9 @@ typedef std::chrono::high_resolution_clock::duration Duration;
 
 Player::Player(std::unique_ptr<NDashStream> dash_stream,
                WindowPtr window,
-               RendererPtr renderer,
-               TexturePtr texture)
+               RendererPtr renderer)
     : window_(std::move(window)),
       renderer_(std::move(renderer)),
-      texture_(std::move(texture)),
       dash_stream_(std::move(dash_stream)),
       running_(false),
       paused_(false),
@@ -121,10 +120,23 @@ util::StatusOr<std::unique_ptr<Player>> Player::Make(
                         "Unable to detect audio codec settings");
   }
 
+  // For our playback window, we will use the reported width/height from
+  // the video codec settings to establish an aspect ratio. But our window
+  // will be bigger if the reported values are lower than a reasonable size.
+  // All video frames thereafter will be scaled into that window.
+  size_t video_width = video_codec_settings.width;
+  size_t video_height = video_codec_settings.height;
+  size_t window_width = video_width;
+  size_t window_height = video_height;
+  double aspect_ratio = (double)video_height / (double)video_width;
+  if (window_width < kMinWindowWidth) {
+    window_width = kMinWindowWidth;
+    window_height = kMinWindowWidth * aspect_ratio;
+  }
+
   WindowPtr window{
       SDL_CreateWindow("player", SDL_WINDOWPOS_UNDEFINED,
-                       SDL_WINDOWPOS_UNDEFINED, video_codec_settings.width,
-                       video_codec_settings.height,
+                       SDL_WINDOWPOS_UNDEFINED, window_width, window_height,
                        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE),
       [](SDL_Window* w) { SDL_DestroyWindow(w); }};
   if (!window) {
@@ -141,22 +153,14 @@ util::StatusOr<std::unique_ptr<Player>> Player::Make(
                         "Unable to open SDL renderer for output");
   }
 
-  TexturePtr texture{
-      SDL_CreateTexture(renderer.get(), SDL_PIXELFORMAT_YV12,
-                        SDL_TEXTUREACCESS_STREAMING, video_codec_settings.width,
-                        video_codec_settings.height),
-      [](SDL_Texture* t) { SDL_DestroyTexture(t); }};
-
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-  SDL_RenderSetLogicalSize(renderer.get(), video_codec_settings.width,
-                           video_codec_settings.height);
+  SDL_RenderSetLogicalSize(renderer.get(), window_width, window_height);
   SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
   SDL_RenderClear(renderer.get());
   SDL_RenderPresent(renderer.get());
 
-  std::unique_ptr<Player> player(
-      new Player(std::move(dash_stream), std::move(window), std::move(renderer),
-                 std::move(texture)));
+  std::unique_ptr<Player> player(new Player(
+      std::move(dash_stream), std::move(window), std::move(renderer)));
 
   SDL_AudioSpec wanted_spec;
   wanted_spec.channels = audio_codec_settings.num_channels;
@@ -188,7 +192,7 @@ void Player::Start() {
     // Handle rate change.
     if (current_rate_index != playback_rate_index_) {
       current_rate_index = playback_rate_index_;
-      dash_stream_->SetPlaybackRate(playback_rates[current_rate_index]);
+      dash_stream_->SetPlaybackRate(kPlaybackRates[current_rate_index]);
     }
 
     // Flush was requested, start with a new frame source queue.
@@ -365,16 +369,43 @@ void Player::RenderLoop() {
           last_pts_microseconds = video_pts_microseconds;
 
           std::this_thread::sleep_for(
-              frame_delay / std::abs(playback_rates[playback_rate_index_]));
+              frame_delay / std::abs(kPlaybackRates[playback_rate_index_]));
         }
         uint8_t* planes[3]{output_frame->data[0], output_frame->data[1],
                            output_frame->data[2]};
         int pitches[3]{output_frame->linesize[0], output_frame->linesize[1],
                        output_frame->linesize[2]};
+
+        if (!texture_ || prev_frame_width != output_frame->width ||
+            prev_frame_height != output_frame->height) {
+          TexturePtr texture{
+              SDL_CreateTexture(renderer_.get(), SDL_PIXELFORMAT_YV12,
+                                SDL_TEXTUREACCESS_STREAMING,
+                                output_frame->width, output_frame->height),
+              [](SDL_Texture* t) { SDL_DestroyTexture(t); }};
+          texture_ = std::move(texture);
+          prev_frame_width = output_frame->width;
+          prev_frame_height = output_frame->height;
+        }
+
+        // Window size may have changed. Scale accordingly.
+        SDL_Rect dest_rect;
+        dest_rect.x = 0;
+        dest_rect.y = 0;
+        int win_w;
+        int win_h;
+        SDL_GetWindowSize(window_.get(), &win_w, &win_h);
+        SDL_RenderSetLogicalSize(renderer_.get(), win_w, win_h);
+
+        double aspect_ratio = (double) output_frame->height / (double)output_frame->width;
+        win_h = (int)((double)win_w * aspect_ratio);
+        dest_rect.w = win_w;
+        dest_rect.h = win_h;
+
         SDL_UpdateYUVTexture(texture_.get(), nullptr, planes[0], pitches[0],
                              planes[1], pitches[1], planes[2], pitches[2]);
         SDL_RenderClear(renderer_.get());
-        SDL_RenderCopy(renderer_.get(), texture_.get(), nullptr, nullptr);
+        SDL_RenderCopy(renderer_.get(), texture_.get(), nullptr, &dest_rect);
         SDL_RenderPresent(renderer_.get());
 
         // Calculate how long it took to actually render the last frame and

@@ -1155,6 +1155,9 @@ int DashThread::CopyFrameImpl(void* buffer,
 
   fi->type = current_track_->frame_type_;
 
+  fi->width = current_track_->format_holder_.format->GetWidth();
+  fi->height = current_track_->format_holder_.format->GetHeight();
+
   int64_t sample_time_us =
       sample_holder->GetTimeUs() - GetSampleOffsetMs() * 1000;
   util::PresentationTime pt = util::PresentationTimeFromUs(sample_time_us);

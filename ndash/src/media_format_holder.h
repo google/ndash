@@ -32,7 +32,7 @@ namespace ndash {
 // Holds a MediaFormat and corresponding drm scheme initialization data.
 struct MediaFormatHolder {
   // The format of the media.
-  base::WeakPtr<const MediaFormat> format;
+  std::unique_ptr<const MediaFormat> format;
 
   // Initialization data for drm schemes supported by the media. Null if the
   // media is not encrypted.

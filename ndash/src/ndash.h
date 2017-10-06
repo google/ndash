@@ -256,6 +256,8 @@ struct DashFrameInfo {
   const int* clear_bytes;  // Number of clear bytes in each subsample.
   const int* enc_bytes;    // Number of encrypted bytes in each subsample.
 
+  size_t width;
+  size_t height;
   // TODO(rdaum): Add timebase and timeline position.
 };
 
