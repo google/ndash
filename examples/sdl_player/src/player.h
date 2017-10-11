@@ -54,8 +54,7 @@ class Player {
  private:
   Player(std::unique_ptr<NDashStream> dash_stream,
          WindowPtr window,
-         RendererPtr renderer,
-         TexturePtr texture);
+         RendererPtr renderer);
 
   util::StatusOr<std::unique_ptr<FrameSourceQueue>> CreateFrameQueue();
   void RenderLoop();
@@ -79,6 +78,10 @@ class Player {
   std::thread frame_decoder_thread_;
   int64_t start_time_ms_;
   int playback_rate_index_;
+
+  // Used to detect resolution changes which require a newly sized texture.
+  int prev_frame_width = -1;
+  int prev_frame_height = -1;
 };
 
 }  // namespace player

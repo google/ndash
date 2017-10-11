@@ -226,7 +226,7 @@ SampleSourceReaderInterface::ReadResult ChunkSampleSource::ReadData(
     // arrive here.
     const MediaFormat* media_format = current_chunk->GetMediaFormat();
     if (media_format && media_format != downstream_media_format_.get()) {
-      format_holder->format = media_format->AsWeakPtr();
+      format_holder->format.reset(new MediaFormat(*media_format));
       format_holder->drm_init_data = current_chunk->GetDrmInitData();
       downstream_media_format_ = media_format->AsWeakPtr();
       return FORMAT_READ;
