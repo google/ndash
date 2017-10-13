@@ -95,11 +95,94 @@ util::StatusOr<std::unique_ptr<FrameSourceQueue>> FrameSourceQueue::Make(
 
   switch (audio_codec_settings.channel_layout) {
     case DashChannelLayout::kChannelLayoutMono:
-      audio_codec_par->channel_layout = 1;
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_MONO;
       break;
     case DashChannelLayout::kChannelLayoutStereo:
-      audio_codec_par->channel_layout = 3;
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_STEREO;
       break;
+    case kChannelLayout2_1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_2_1;
+      break;
+    case kChannelLayoutSurround:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_2_1;
+      break;
+    case kChannelLayout4_0:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_4POINT0;
+      break;
+    case kChannelLayout2_2:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_2_2;
+      break;
+    case kChannelLayoutQuad:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_QUAD;
+      break;
+    case kChannelLayout5_0:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_5POINT0;
+      break;
+    case kChannelLayout5_1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_5POINT1;
+      break;
+    case kChannelLayout5_0_Back:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_5POINT0_BACK;
+      break;
+    case kChannelLayout5_1_Back:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_5POINT1_BACK;
+      break;
+    case kChannelLayout7_0:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_7POINT0;
+      break;
+    case kChannelLayout7_1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_7POINT1;
+      break;
+    case kChannelLayout7_1_Wide:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_7POINT1_WIDE;
+      break;
+    case kChannelLayoutStereoDownmix:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
+      break;
+    case kChannelLayout2Point1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_2POINT1;
+      break;
+    case kChannelLayout3_1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_3POINT1;
+      break;
+    case kChannelLayout4_1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_4POINT1;
+      break;
+    case kChannelLayout6_0:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_6POINT0;
+      break;
+    case kChannelLayout6_0_Front:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_6POINT0_FRONT;
+      break;
+    case kChannelLayoutHexagonal:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_HEXAGONAL;
+      break;
+    case kChannelLayout6_1:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_6POINT1;
+      break;
+    case kChannelLayout6_1_Back:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_6POINT1_BACK;
+      break;
+    case kChannelLayout6_1_Front:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_6POINT1_FRONT;
+      break;
+    case kChannelLayout7_0_Front:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_7POINT0;
+      break;
+    case kChannelLayout7_1_WideBack:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_7POINT1_WIDE_BACK;
+      break;
+    case kChannelLayoutOctagonal:
+      audio_codec_par->channel_layout = AV_CH_LAYOUT_OCTAGONAL;
+      break;
+
+    // Unsupported/None, all fall through to failure.
+    case kChannelLayoutDiscrete:
+    case kChannelLayoutStereoAndKeyboardMic:
+    case kChannelLayout4_1_QuadSide:
+      break;
+    case kChannelLayoutNone:
+    case kChannelLayoutUnsupported:
     default:
       return util::Status(util::Code::UNAVAILABLE,
                           "Unsupported channel layout");
