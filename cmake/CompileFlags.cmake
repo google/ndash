@@ -21,7 +21,8 @@ add_compile_options(
         -fPIC
         -Wno-sign-compare
         -fno-exceptions
-        -Wno-deprecated-register
         -Wno-narrowing
         -Wno-psabi
+        -Wno-deprecated-declarations
+        -Wno-unused-function
         -Wno-unused-local-typedefs)

@@ -21,8 +21,6 @@ include_directories(src)
 # Include paths relative to src directory.
 include_directories(../../ndash/src)
 
-# Find some packages.
-find_package(GTest REQUIRED)
 find_package(gflags REQUIRED)
 
 include(FindPkgConfig)
@@ -93,7 +91,8 @@ function(define_test name sources)
     add_executable(${name} ${sources})
     target_link_libraries(${name}
             native-player-lib
-            ${GTEST_BOTH_LIBRARIES}
+            libgtest
+            libgmock
             ${GLOG_LIBRARY}
             pthread)
     add_test(${name} ${name})

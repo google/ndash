@@ -18,9 +18,6 @@ cmake_minimum_required(VERSION 2.8)
 # Include paths relative to src directory.
 include_directories(src)
 
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-
 # Turn on C++11 in a way portable across CMake versions.
 include(../../../cmake/Cxx11.cmake)
 use_cxx11()
@@ -259,7 +256,4 @@ list(APPEND BASE_TEST_SOURCES
         src/base/test/test_file_util_linux.cc
         src/base/test/simple_test_clock.h)
 add_library(chromium-base-test ${BASE_TEST_SOURCES})
-add_dependencies(chromium-base-test chromium-base)
-
-
-
+add_dependencies(chromium-base-test chromium-base libgtest libgmock)

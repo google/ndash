@@ -32,17 +32,8 @@ pkg_search_module(STRINGENCODERS stringencoders REQUIRED)
 include_directories(${XML2_INCLUDE_DIRS})
 include_directories(${STRINGENCODERS_INCLUDE_DIRS})
 
-# Look for gmock/gtest
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-
 find_package(gflags REQUIRED)
 include_directories(${GFLAGS_INCLUDE_DIRS})
-
-find_library(GMOCK_LIBRARY NAMES gmock)
-if(NOT GMOCK_LIBRARY)
-    message(FATAL_ERROR "GMock library not found")
-endif(NOT GMOCK_LIBRARY)
 
 find_library(GLOG_LIBRARY NAMES glog)
 if(NOT GLOG_LIBRARY)
@@ -409,8 +400,8 @@ target_link_libraries(ndash_unittests
         ${LIBEVENT_LIBRARIES}
         ${LIBCURL_LIBRARIES}
         ${STRINGENCODERS_LIBRARIES}
-        ${GTEST_LIBRARIES}
-        ${GMOCK_LIBRARY}
+        libgtest
+        libgmock
         ${GFLAGS_LIBRARIES}
         ${GLOG_LIBRARY}
 )
