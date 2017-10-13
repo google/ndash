@@ -20,6 +20,9 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+# Configure gtest/gmock
+include(cmake/GoogleTest.cmake)
+
 add_subdirectory(third_party/chromium/base)
 add_subdirectory(third_party/chromium/mp4)
 add_subdirectory(ndash)
